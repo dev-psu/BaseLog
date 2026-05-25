@@ -35,3 +35,15 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### macOS ###
+.DS_Store
+
+### Environment ###
+.env
+.env.*
+!.env.example
+
+### IntelliJ HTTP Client ###
+http-client.private.env.json
+.idea/httpRequests/

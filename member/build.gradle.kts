@@ -12,4 +12,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.jackson.module.kotlin)
+    testImplementation(libs.mockito.kotlin)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

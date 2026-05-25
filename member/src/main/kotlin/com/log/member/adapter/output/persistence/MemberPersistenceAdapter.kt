@@ -26,7 +26,7 @@ class MemberPersistenceAdapter(
         memberJpaRepository.findByEmail(email)?.toDomain()
 
     override fun existsByNickname(nickName: String): Boolean =
-        memberJpaRepository.existsNickname(nickName)
+        memberJpaRepository.existsByNickname(nickName)
 
     override fun existsByEmail(email: String): Boolean =
         memberJpaRepository.existsByEmail(email)

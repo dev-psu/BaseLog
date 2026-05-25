@@ -4,6 +4,7 @@ import com.log.common.response.ApiResponse
 import com.log.member.domain.port.input.GetMemberUseCase
 import com.log.member.domain.port.input.RegisterMemberCommand
 import com.log.member.domain.port.input.RegisterMemberUseCase
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -18,7 +19,7 @@ class MemberController(
 ) {
 
     @PostMapping
-    fun register(@RequestBody request: RegisterMemberRequest): ApiResponse<Long> {
+    fun register(@Valid @RequestBody request: RegisterMemberRequest): ApiResponse<Long> {
         val command = RegisterMemberCommand(
             email = request.email,
             nickname = request.nickname,

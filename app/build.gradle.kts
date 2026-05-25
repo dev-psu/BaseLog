@@ -10,5 +10,7 @@ dependencies {
     implementation(libs.spring.boot.starter.web)
     implementation(libs.kotlin.reflect)
 
+    implementation(libs.jackson.module.kotlin)
+    runtimeOnly(libs.h2)
     testImplementation(libs.spring.boot.starter.test)
 }

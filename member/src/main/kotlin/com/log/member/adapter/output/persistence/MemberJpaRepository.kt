@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface MemberJpaRepository : JpaRepository<MemberJpaEntity, Long> {
 
     fun findByEmail(email: String): MemberJpaEntity?
-    fun existsNickname(nickName: String): Boolean
+    fun existsByNickname(nickname: String): Boolean
     fun existsByEmail(email: String): Boolean
 
 }
