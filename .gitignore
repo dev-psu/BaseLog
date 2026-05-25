@@ -45,5 +45,9 @@ out/
 !.env.example
 
 ### IntelliJ HTTP Client ###
+http/
 http-client.private.env.json
 .idea/httpRequests/
+
+### Test Code ###
+**/src/test/
