@@ -29,6 +29,18 @@ class MemberController(
         return ApiResponse.ok(id)
     }
 
+    @GetMapping("/check/email")
+    fun checkEmail(@RequestParam email: String): ApiResponse<Unit> {
+        getMemberUseCase.checkEmailAvailable(email)
+        return ApiResponse.ok(Unit)
+    }
+
+    @GetMapping("/check/nickname")
+    fun checkNickname(@RequestParam nickname: String): ApiResponse<Unit> {
+        getMemberUseCase.checkNicknameAvailable(nickname)
+        return ApiResponse.ok(Unit)
+    }
+
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Long): ApiResponse<MemberResponse> {
         val member = getMemberUseCase.getById(id)
