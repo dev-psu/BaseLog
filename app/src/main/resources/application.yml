@@ -25,3 +25,9 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+
+jwt:
+  # dev용 시크릿 — 운영 환경에서는 환경변수로 오버라이드 필요
+  secret: aCSMFzs+81OFPHgwdqdYTH0YAXf2dZJpuHThL51Uzu3aSkaqWvtVg/qZondc/xRb
+  access-token-expiry: 1800      # 30분 (초)
+  refresh-token-expiry: 604800   # 7일 (초)

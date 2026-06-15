@@ -13,6 +13,8 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 h2 = { module = "com.h2database:h2" }
 jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "5.4.0" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
