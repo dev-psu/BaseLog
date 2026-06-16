@@ -7,6 +7,7 @@ plugins {
 dependencies {
     implementation(project(":common"))
     implementation(project(":member"))
+    implementation(project(":game"))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.kotlin.reflect)
     implementation(libs.jackson.module.kotlin)

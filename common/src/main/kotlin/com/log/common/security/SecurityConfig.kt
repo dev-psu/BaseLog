@@ -39,6 +39,7 @@ class SecurityConfig(
                     .requestMatchers("/h2-console/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/members").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/members/check/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/games/**").permitAll()
                     .anyRequest().authenticated()
             }
             .exceptionHandling { ex ->
