@@ -11,7 +11,7 @@ import java.time.LocalTime
 @Entity
 @Table(
     name = "game",
-    uniqueConstraints = [UniqueConstraint(columnNames = ["season", "game_type", "game_date", "home_team", "away_team"])],
+    uniqueConstraints = [UniqueConstraint(columnNames = ["season", "game_type", "game_date", "home_team", "away_team", "game_number"])],
 )
 class GameJpaEntity(
 

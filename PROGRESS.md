@@ -11,9 +11,10 @@
 - [x] `JwtProvider` — HS256 토큰 발급/검증, onboarding 토큰 발급/검증 (10분 만료)
 - [x] `JwtAuthenticationFilter` — Bearer 토큰 파싱, SecurityContext 설정
 - [x] `SecurityConfig` — Spring Security FilterChain, CORS 설정, 공개/보호 경로 분리
+- [x] `KboTeam` enum — member, game 모듈 공유 (typealias로 기존 코드 호환 유지)
 
 ### member 모듈
-- [x] `Member`, `Email`, `Nickname`, `SocialAccount`, `KboTeam` 도메인 모델
+- [x] `Member`, `Email`, `Nickname`, `SocialAccount`, `KboTeam`, `KboTeam` 도메인 모델
 - [x] `Member` 프로필 필드 — `profileImageUrl`, `favoriteTeam(KboTeam)`, `bio`, `isPublic`
 - [x] `MemberService` — register, getById, checkEmailAvailable, checkNicknameAvailable, updateProfile
 - [x] `MemberController` — POST /api/members, GET /api/members/me, PATCH /api/members/me, GET check/email, GET check/nickname
@@ -45,10 +46,33 @@
   → 기존: accessToken + refreshToken 바로 발급
 ```
 
+### game 모듈
+- [x] `GameType` enum — EXHIBITION(시범), REGULAR(정규), POSTSEASON(포스트)
+- [x] `GameStatus` enum — SCHEDULED, COMPLETED, CANCELED, POSTPONED
+- [x] `Game` 도메인 모델 — gameNumber(더블헤더 순번) 포함
+- [x] `GameErrorCode` — GAME_NOT_FOUND
+- [x] `GetGameUseCase` — getBySeasonAndMonth, getById
+- [x] `GameRepository` 포트
+- [x] `GameService`
+- [x] `GameJpaEntity`, `GameJpaRepository`, `GamePersistenceAdapter`
+- [x] `GameController` — GET /api/games, GET /api/games/{id} (인증 불필요)
+- [x] Flyway V4 — game 테이블 (UNIQUE: season + game_type + game_date + home_team + away_team + game_number)
+
+### kbo-crawler (별도 프로젝트)
+- [x] 프로젝트 세팅 — Playwright, SQLAlchemy, APScheduler
+- [x] `GameType`, `GameStatus`, `Game` 도메인 모델 (BaseLog와 동일 값)
+- [x] `GameEntity` — BaseLog game 테이블과 동일 스키마 (team 테이블 없음, KboTeam 코드 직접 저장)
+- [x] `upsert_games` — MySQL ON DUPLICATE KEY UPDATE
+- [x] `KakaoOAuth2Adapter` — KBO 일정 페이지 Playwright 크롤링 (연도/월/경기종류 선택)
+- [x] `parse_schedule` — 더블헤더 game_number 자동 추적, 상태 파싱
+- [x] `crawl_month` / `crawl_season` / `crawl_all` — 월/시즌/전체 수집 단위
+- [x] CLI — `--full`, `--year`, `--type`, `--month` 인자 지원
+- [x] `scheduler.py` — APScheduler, 매일 08:00 KST `run_full` 실행
+
 ### 인프라
 - [x] H2 인메모리 DB (기본/테스트, ddl-auto: create-drop)
 - [x] Docker Compose + MySQL 8.0 (로컬 개발 환경)
-- [x] Flyway 마이그레이션 — V1(초기 스키마), V2(프로필 필드), V3(email nullable)
+- [x] Flyway 마이그레이션 — V1(초기 스키마), V2(프로필 필드), V3(email nullable), V4(game 테이블)
 - [x] `application-local.yml` — MySQL + Flyway 활성화 프로파일
 - [x] OSIV 비활성화
 - [x] logback-spring.xml — requestId 포함 로그 패턴
@@ -58,18 +82,17 @@
 
 ## 남은 작업
 
-### 1순위 — 경기 일정/결과 (Python 크롤러)
-- [ ] Python 프로젝트 세팅 (별도 레포)
-- [ ] KBO 공식 홈페이지 크롤링 (https://www.koreabaseball.com/Schedule/Schedule.aspx)
-- [ ] 크롤링 결과 MySQL DB 저장 (Spring Boot와 동일 DB)
-- [ ] 경기 일정 도메인 설계 (Game, Team 등)
-- [ ] `GET /api/games` — 일정 조회 API
-- [ ] cron 스케줄링 (시즌 시작 전 1회 또는 주기적 업데이트)
+### 1순위 — 크롤러 셀렉터 검증
+- [ ] KBO 사이트 실제 HTML 확인 — `#tblScheduleList`, `#ddlSeries`, `td.day` 셀렉터
+- [ ] `_GAME_TYPE_VALUES` 딕셔너리 값 검증 (현재 추정값)
+- [ ] 팀명 표기 확인 — `TEAM_NAME_TO_CODE` 매핑
+- [ ] E2E 크롤링 테스트 (정규시즌 1개월)
 
-### 2순위 — 직관/집관 기록
+### 2순위 — 직관/집관 기록 (WatchLog)
 - [ ] `WatchLog` 도메인 설계 (경기, 사용자, 좌석, 동반자, 메모 등)
 - [ ] 기록 작성/수정/삭제 API
 - [ ] 기록 공개/비공개 설정 (isPublic)
+- [ ] Flyway V5 — watch_log 테이블
 
 ### 3순위 — 피드/공유
 - [ ] 공개 기록 피드 조회 API
