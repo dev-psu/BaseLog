@@ -1,32 +1,82 @@
 package com.log.member.adapter.input.web
 
 import com.log.common.response.ApiResponse
+import com.log.member.domain.exception.ErrorCode
+import com.log.member.domain.model.SocialLoginResult
+import com.log.member.domain.model.SocialProvider
 import com.log.member.domain.port.input.AuthUseCase
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/auth")
 class AuthController(private val authUseCase: AuthUseCase) {
 
-    // 소셜 로그인 구현 전 임시 — memberId 직접 입력으로 토큰 발급
-    @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequest): ApiResponse<TokenResponse> {
-        val tokenPair = authUseCase.login(request.memberId)
+    @PostMapping("/social-login")
+    fun socialLogin(@RequestBody @Valid request: SocialLoginRequest): ApiResponse<SocialLoginResponse> {
+        val provider = parseProvider(request.provider)
+        return when (val result = authUseCase.socialLogin(provider, request.code)) {
+            is SocialLoginResult.ExistingMember -> ApiResponse.ok(
+                SocialLoginResponse(
+                    isNewUser = false,
+                    accessToken = result.tokenPair.accessToken,
+                    refreshToken = result.tokenPair.refreshToken,
+                    onboardingToken = null,
+                )
+            )
+            is SocialLoginResult.NewMember -> ApiResponse.ok(
+                SocialLoginResponse(
+                    isNewUser = true,
+                    accessToken = null,
+                    refreshToken = null,
+                    onboardingToken = result.onboardingToken,
+                )
+            )
+        }
+    }
+
+    @PostMapping("/complete-signup")
+    fun completeSignup(@RequestBody @Valid request: CompleteSignupRequest): ApiResponse<TokenResponse> {
+        val tokenPair = authUseCase.completeSignup(request.onboardingToken, request.nickname, request.favoriteTeam)
         return ApiResponse.ok(TokenResponse(tokenPair.accessToken, tokenPair.refreshToken))
     }
 
     @PostMapping("/refresh")
-    fun refresh(@RequestBody request: RefreshRequest): ApiResponse<TokenResponse> {
+    fun refresh(@RequestBody @Valid request: RefreshRequest): ApiResponse<TokenResponse> {
         val tokenPair = authUseCase.refresh(request.refreshToken)
         return ApiResponse.ok(TokenResponse(tokenPair.accessToken, tokenPair.refreshToken))
     }
 
     @PostMapping("/logout")
-    fun logout(@RequestBody request: RefreshRequest): ApiResponse<Unit> {
+    fun logout(@RequestBody @Valid request: RefreshRequest): ApiResponse<Unit> {
         authUseCase.logout(request.refreshToken)
         return ApiResponse(success = true)
     }
+
+    // 카카오 인증 후 리다이렉트를 받아 social-login 처리까지 수행하는 로컬 테스트용 엔드포인트
+    @GetMapping("/kakao/callback")
+    fun kakaoCallback(@RequestParam code: String): ApiResponse<SocialLoginResponse> {
+        return when (val result = authUseCase.socialLogin(SocialProvider.KAKAO, code)) {
+            is SocialLoginResult.ExistingMember -> ApiResponse.ok(
+                SocialLoginResponse(
+                    isNewUser = false,
+                    accessToken = result.tokenPair.accessToken,
+                    refreshToken = result.tokenPair.refreshToken,
+                    onboardingToken = null,
+                )
+            )
+            is SocialLoginResult.NewMember -> ApiResponse.ok(
+                SocialLoginResponse(
+                    isNewUser = true,
+                    accessToken = null,
+                    refreshToken = null,
+                    onboardingToken = result.onboardingToken,
+                )
+            )
+        }
+    }
+
+    private fun parseProvider(value: String): SocialProvider =
+        runCatching { SocialProvider.valueOf(value.uppercase()) }
+            .getOrElse { throw ErrorCode.UNSUPPORTED_PROVIDER.toException() }
 }

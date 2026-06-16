@@ -1,13 +1,9 @@
 package com.log.member.adapter.output.persistence
 
 import com.log.member.domain.model.Member
+import com.log.member.domain.model.SocialProvider
 import com.log.member.domain.port.output.MemberRepository
 import org.springframework.stereotype.Component
-
-/**
- * MemberRepository 구현체
- * domain(MemberRepository) -> adapter(MemberPersistenceAdapter)
- */
 
 @Component
 class MemberPersistenceAdapter(
@@ -24,6 +20,9 @@ class MemberPersistenceAdapter(
 
     override fun findByEmail(email: String): Member? =
         memberJpaRepository.findByEmail(email)?.toDomain()
+
+    override fun findBySocialAccount(provider: SocialProvider, providerId: String): Member? =
+        memberJpaRepository.findBySocialAccount(provider, providerId)?.toDomain()
 
     override fun existsByNickname(nickName: String): Boolean =
         memberJpaRepository.existsByNickname(nickName)

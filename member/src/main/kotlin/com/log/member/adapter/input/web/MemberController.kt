@@ -4,18 +4,18 @@ import com.log.common.response.ApiResponse
 import com.log.member.domain.port.input.GetMemberUseCase
 import com.log.member.domain.port.input.RegisterMemberCommand
 import com.log.member.domain.port.input.RegisterMemberUseCase
+import com.log.member.domain.port.input.UpdateProfileCommand
+import com.log.member.domain.port.input.UpdateProfileUseCase
 import jakarta.validation.Valid
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
-/**
- * 회원 API 컨트롤러 (입력 어댑터)
- * HTTP -> adapter(MemberController) -> port(UseCase)
- */
 @RestController
 @RequestMapping("/api/members")
 class MemberController(
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val getMemberUseCase: GetMemberUseCase,
+    private val updateProfileUseCase: UpdateProfileUseCase,
 ) {
 
     @PostMapping
@@ -42,14 +42,28 @@ class MemberController(
         return ApiResponse.ok(Unit)
     }
 
-    @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long): ApiResponse<MemberResponse> {
-        val member = getMemberUseCase.getById(id)
-        val response = MemberResponse(
-            id = member.id,
-            email = member.email.value,
-            nickname = member.nickname.value,
+    @GetMapping("/me")
+    fun getMe(authentication: Authentication): ApiResponse<MemberResponse> {
+        val memberId = authentication.principal as Long
+        val member = getMemberUseCase.getById(memberId)
+        return ApiResponse.ok(member.toResponse())
+    }
+
+    @PatchMapping("/me")
+    fun updateMe(
+        authentication: Authentication,
+        @Valid @RequestBody request: UpdateProfileRequest,
+    ): ApiResponse<MemberResponse> {
+        val memberId = authentication.principal as Long
+        val command = UpdateProfileCommand(
+            memberId = memberId,
+            nickname = request.nickname,
+            profileImageUrl = request.profileImageUrl,
+            favoriteTeam = request.favoriteTeam,
+            bio = request.bio,
+            isPublic = request.isPublic,
         )
-        return ApiResponse.ok(response)
+        val member = updateProfileUseCase.updateProfile(command)
+        return ApiResponse.ok(member.toResponse())
     }
 }

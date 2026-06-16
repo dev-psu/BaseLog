@@ -25,6 +25,7 @@ class MdcLoggingFilter : OncePerRequestFilter() {
         try {
             filterChain.doFilter(request, response)
         } finally {
+            // MDC는 thread-local이므로 반드시 clear해야 다음 요청에 requestId가 섞이지 않음
             MDC.clear()
         }
     }

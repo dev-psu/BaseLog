@@ -1,8 +1,5 @@
 package com.log.member.domain.model
 
-/**
- * 닉네임 Value Object
- */
 @JvmInline
 value class Nickname(val value: String) {
     init {

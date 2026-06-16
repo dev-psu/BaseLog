@@ -1,8 +1,5 @@
 package com.log.member.domain.model
 
-/**
- * 이메일 Value Object
- */
 @JvmInline
 value class Email(val value: String) {
     init {

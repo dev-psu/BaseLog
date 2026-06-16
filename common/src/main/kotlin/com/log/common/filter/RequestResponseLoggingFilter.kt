@@ -31,6 +31,7 @@ class RequestResponseLoggingFilter : OncePerRequestFilter() {
         } finally {
             logRequest(wrappedRequest)
             logResponse(wrappedResponse, System.currentTimeMillis() - startTime)
+            // ContentCachingResponseWrapper가 응답 바디를 메모리에 버퍼링하므로 실제 소켓으로 플러시 필요
             wrappedResponse.copyBodyToResponse()
         }
     }
@@ -52,7 +53,6 @@ class RequestResponseLoggingFilter : OncePerRequestFilter() {
     private fun maskSensitiveFields(body: String): String =
         MASK_PATTERN.replace(body) { "${it.groupValues[1]}****\"" }
 
-    // actuator 등 불필요한 엔드포인트 제외
     override fun shouldNotFilter(request: HttpServletRequest): Boolean =
         request.requestURI.startsWith("/actuator")
 

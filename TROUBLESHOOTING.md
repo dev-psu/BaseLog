@@ -150,6 +150,24 @@ spring-security-oauth2-jose = { module = "org.springframework.security:spring-se
 
 ---
 
+## Spring Boot 4.x Flyway 자동 설정 모듈 분리
+
+**증상**
+Flyway가 전혀 실행되지 않음 (관련 로그 없음), `spring.flyway.enabled: true` 설정도 무시됨.
+
+**원인**
+Spring Boot 4.x에서 Flyway 자동 설정이 `spring-boot-autoconfigure`에서 `spring-boot-flyway`로 분리됨.
+
+**해결**
+```toml
+spring-boot-flyway = { module = "org.springframework.boot:spring-boot-flyway" }
+```
+```kotlin
+implementation(libs.spring.boot.flyway)
+```
+
+---
+
 ## 포트 충돌 (8080 → 8081)
 
 **증상**  

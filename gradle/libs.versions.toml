@@ -15,6 +15,10 @@ jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin" 
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "5.4.0" }
 spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
+flyway-core = { module = "org.flywaydb:flyway-core" }
+flyway-mysql = { module = "org.flywaydb:flyway-mysql" }
+spring-boot-flyway = { module = "org.springframework.boot:spring-boot-flyway" }
+mysql-connector-j = { module = "com.mysql:mysql-connector-j" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

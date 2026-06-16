@@ -1,11 +1,8 @@
 package com.log.member.domain.port.output
 
 import com.log.member.domain.model.Member
+import com.log.member.domain.model.SocialProvider
 
-/**
- * 회원 저장소 (출력 포트)
- * service(MemberService) -> port(MemberRepository) -> adapter(MemberPersistenceAdapter)
- */
 interface MemberRepository {
 
     fun save(member: Member): Member
@@ -13,6 +10,8 @@ interface MemberRepository {
     fun findById(id: Long): Member?
 
     fun findByEmail(email: String): Member?
+
+    fun findBySocialAccount(provider: SocialProvider, providerId: String): Member?
 
     fun existsByNickname(nickName: String): Boolean
 
