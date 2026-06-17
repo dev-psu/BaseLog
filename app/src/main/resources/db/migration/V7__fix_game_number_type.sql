@@ -1,0 +1,2 @@
+ALTER TABLE game
+    MODIFY COLUMN game_number INT NOT NULL DEFAULT 1;

@@ -17,4 +17,5 @@ data class Game(
     val awayScore: Int?,
     val status: GameStatus,
     val gameNumber: Int = 1,
+    val detail: GameDetail? = null,
 )

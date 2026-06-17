@@ -1,11 +1,11 @@
 package com.log.member.domain.model
 
-import java.time.Instant
+import java.time.LocalDateTime
 
 data class RefreshToken(
     val token: String,
     val memberId: Long,
-    val expiresAt: Instant,
+    val expiresAt: LocalDateTime,
 ) {
-    fun isExpired(): Boolean = expiresAt.isBefore(Instant.now())
+    fun isExpired(): Boolean = expiresAt.isBefore(LocalDateTime.now())
 }

@@ -17,7 +17,7 @@ import com.log.member.domain.port.output.SocialOAuth2Port
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
@@ -95,7 +95,7 @@ class AuthService(
             RefreshToken(
                 token = newRefreshToken,
                 memberId = memberId,
-                expiresAt = Instant.now().plusSeconds(refreshTokenExpiry),
+                expiresAt = LocalDateTime.now().plusSeconds(refreshTokenExpiry),
             )
         )
         return TokenPair(accessToken, newRefreshToken)

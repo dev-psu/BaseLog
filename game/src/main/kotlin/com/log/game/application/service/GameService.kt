@@ -16,6 +16,9 @@ class GameService(
     override fun getBySeasonAndMonth(season: Int, month: Int): List<Game> =
         gameRepository.findBySeasonAndMonth(season, month)
 
-    override fun getById(id: Long): Game =
-        gameRepository.findById(id) ?: throw GameErrorCode.GAME_NOT_FOUND.toException()
+    override fun getById(id: Long): Game {
+        val game = gameRepository.findById(id) ?: throw GameErrorCode.GAME_NOT_FOUND.toException()
+        val detail = gameRepository.findDetailByGameId(id)
+        return game.copy(detail = detail)
+    }
 }

@@ -1,4 +1,2 @@
-ALTER TABLE game
-    ADD COLUMN game_number TINYINT NOT NULL DEFAULT 1,
-    DROP INDEX uq_game,
-    ADD UNIQUE KEY uq_game (season, game_type, game_date, home_team, away_team, game_number);
+-- game_number 컬럼과 uq_game unique key는 V4에 이미 포함됨
+SELECT 1;
