@@ -18,4 +18,5 @@ data class Game(
     val status: GameStatus,
     val gameNumber: Int = 1,
     val detail: GameDetail? = null,
+    val weather: GameWeather? = null,
 )

@@ -1,3 +1,3 @@
 rootProject.name = "baseLog"
 
-include("app", "common", "member", "game")
+include("app", "common", "member", "game", "watchlog")

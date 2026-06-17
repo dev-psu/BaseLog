@@ -20,6 +20,9 @@ flyway-mysql = { module = "org.flywaydb:flyway-mysql" }
 spring-boot-flyway = { module = "org.springframework.boot:spring-boot-flyway" }
 mysql-connector-j = { module = "com.mysql:mysql-connector-j" }
 
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
+spring-boot-starter-cache = { module = "org.springframework.boot:spring-boot-starter-cache" }
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }

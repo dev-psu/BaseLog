@@ -1,5 +1,6 @@
 package com.log.game.adapter.input.web
 
+import com.log.common.domain.KboTeam
 import com.log.common.response.ApiResponse
 import com.log.game.domain.port.input.GetGameUseCase
 import org.springframework.web.bind.annotation.*
@@ -14,8 +15,9 @@ class GameController(
     fun getGames(
         @RequestParam season: Int,
         @RequestParam month: Int,
+        @RequestParam(required = false) favoriteTeam: KboTeam?,
     ): ApiResponse<List<GameResponse>> {
-        val games = getGameUseCase.getBySeasonAndMonth(season, month)
+        val games = getGameUseCase.getBySeasonAndMonth(season, month, favoriteTeam)
         return ApiResponse.ok(games.map { it.toResponse() })
     }
 

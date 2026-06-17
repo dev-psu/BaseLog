@@ -28,7 +28,8 @@ BaseLog/
 ├── app/        # 실행 진입점 (@SpringBootApplication)
 ├── common/     # 공통 인프라 — 예외, 필터, 응답 포맷, Security, KboTeam
 ├── member/     # 회원 도메인
-└── game/       # 경기 일정 도메인
+├── game/       # 경기 일정 도메인
+└── watchlog/   # 직관/집관 기록 도메인
 ```
 
 **의존 방향:** `app` → `common`, `member`, `game` / `member`, `game` → `common`
@@ -87,6 +88,17 @@ domain/
 |--------|------|------|
 | GET | `/api/members/me` | 내 정보 조회 |
 | PATCH | `/api/members/me` | 프로필 수정 |
+| POST | `/api/watch-logs` | 기록 작성 |
+| PATCH | `/api/watch-logs/{id}` | 기록 수정 |
+| DELETE | `/api/watch-logs/{id}` | 기록 삭제 |
+| GET | `/api/watch-logs/me` | 내 기록 목록 (페이징) |
+| GET | `/api/watch-logs/me/stats` | 내 통계/승률 |
+
+### 인증 선택 (비로그인도 조회 가능, 로그인 시 추가 기능)
+
+| Method | Path | 설명 |
+|--------|------|------|
+| GET | `/api/watch-logs/{id}` | 기록 상세 (비공개는 본인만) |
 
 ### 응답 포맷
 
@@ -133,6 +145,37 @@ JWT_SECRET=<base64-encoded-32bytes-이상>
 | gameNumber | SMALLINT | 더블헤더 순번 (기본 1) |
 
 UNIQUE: `(season, game_type, game_date, home_team, away_team, game_number)`
+
+---
+
+## WatchLog 도메인 (watchlog 모듈)
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| watchType | ENUM | STADIUM(직관) / HOME(집관) / BAR / OTHER |
+| cheeringTeam | ENUM(KboTeam) | 이 기록에서 응원한 팀 |
+| result | ENUM | WIN / LOSE / DRAW / SUSPENDED / CANCELED |
+| seatInfo | Object | grade, section, row, number (STADIUM 전용) |
+| companions | VARCHAR(200) | 동반자 이름 (쉼표 구분) |
+| mood | ENUM | GREAT / GOOD / NORMAL / BAD / TERRIBLE |
+| cost | Object | ticketCost, foodCost, transportCost |
+| weather | Object | condition, temperatureCelsius (사용자 직접 입력) |
+| isPublic | BOOLEAN | 공개 여부 |
+| images | List | TICKET / PHOTO 타입 이미지 URL 목록 |
+
+### 통계 응답 (`GET /api/watch-logs/me/stats`)
+
+- 전체/직관/집관 승률 분리
+- 현재 연승/연패 스트릭 + 역대 최장 연승
+- 방문한 구장 목록 (도장판)
+- 시즌 총 지출
+
+### 경기 일정 날씨
+
+`GET /api/games`, `GET /api/games/{id}` 응답에 오늘 경기 한정으로 `weather` 포함.
+기상청 초단기실황 API 기반, 구장별 30분 Caffeine 캐시.
+
+환경변수: `KMA_SERVICE_KEY`
 
 ---
 

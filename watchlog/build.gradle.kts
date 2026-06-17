@@ -8,9 +8,9 @@ dependencies {
     implementation(platform(libs.spring.boot.bom))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.security)
     implementation(libs.kotlin.reflect)
     implementation(libs.jackson.module.kotlin)
-    implementation(libs.spring.boot.starter.cache)
 
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.mockito.kotlin)

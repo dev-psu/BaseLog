@@ -92,11 +92,16 @@
 
 ## 남은 작업
 
-### 1순위 — 직관/집관 기록 (WatchLog)
-- [ ] `WatchLog` 도메인 설계 (경기, 사용자, 좌석, 동반자, 메모 등)
-- [ ] 기록 작성/수정/삭제 API
-- [ ] 기록 공개/비공개 설정 (isPublic)
-- [ ] Flyway V9 — watch_log 테이블
+### 1순위 — 직관/집관 기록 (WatchLog) ✅
+- [x] `WatchLog` 도메인 설계 — game, venue, seatInfo, companions, cost, weather, mood, isPublic
+- [x] 기록 CRUD API — POST/PATCH/DELETE /api/watch-logs, GET /api/watch-logs/{id}
+- [x] 내 기록 목록 — GET /api/watch-logs/me (페이징)
+- [x] 승률/통계 — GET /api/watch-logs/me/stats (직관/집관 승률 분리, 연승 스트릭, 구장 도장판, 시즌 지출)
+- [x] 날씨 참고 — 경기 상세/목록에 기상청 초단기실황 포함 (오늘 경기만, 30분 Caffeine 캐시)
+- [x] 응원팀 상단 정렬 — GET /api/games?favoriteTeam=KIA
+- [x] Flyway V9 — watch_log 테이블 (cost, weather, venue, seat 컬럼 포함)
+- [x] Flyway V10 — watch_log_image 테이블
+- [ ] 이미지 업로드 — S3 presigned URL (S3 설정 후 구현 예정)
 
 ### 2순위 — 피드/공유
 - [ ] 공개 기록 피드 조회 API

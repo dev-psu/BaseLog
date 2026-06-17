@@ -1,10 +1,7 @@
 package com.log.game.adapter.input.web
 
 import com.log.common.domain.KboTeam
-import com.log.game.domain.model.Game
-import com.log.game.domain.model.GameDetail
-import com.log.game.domain.model.GameStatus
-import com.log.game.domain.model.GameType
+import com.log.game.domain.model.*
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -15,6 +12,11 @@ data class GameDetailResponse(
     val homeErrors: Int,
     val awayInnings: List<Int>,
     val homeInnings: List<Int>,
+)
+
+data class GameWeatherResponse(
+    val condition: WeatherCondition,
+    val temperatureCelsius: Double?,
 )
 
 data class GameResponse(
@@ -31,6 +33,7 @@ data class GameResponse(
     val status: GameStatus,
     val gameNumber: Int,
     val detail: GameDetailResponse?,
+    val weather: GameWeatherResponse?,
 )
 
 fun GameDetail.toResponse() = GameDetailResponse(
@@ -40,6 +43,11 @@ fun GameDetail.toResponse() = GameDetailResponse(
     homeErrors = homeErrors,
     awayInnings = awayInnings,
     homeInnings = homeInnings,
+)
+
+fun GameWeather.toResponse() = GameWeatherResponse(
+    condition = condition,
+    temperatureCelsius = temperatureCelsius,
 )
 
 fun Game.toResponse() = GameResponse(
@@ -56,4 +64,5 @@ fun Game.toResponse() = GameResponse(
     status = status,
     gameNumber = gameNumber,
     detail = detail?.toResponse(),
+    weather = weather?.toResponse(),
 )
