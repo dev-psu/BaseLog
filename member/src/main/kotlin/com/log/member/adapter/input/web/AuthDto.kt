@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size
 
 data class SocialLoginRequest(
     @field:NotBlank val provider: String,
-    @field:NotBlank val code: String,
+    @field:NotBlank val accessToken: String,
 )
 
 data class SocialLoginResponse(

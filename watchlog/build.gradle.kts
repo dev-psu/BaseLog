@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":member"))
     implementation(platform(libs.spring.boot.bom))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.data.jpa)

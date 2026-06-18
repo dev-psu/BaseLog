@@ -41,6 +41,8 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/api/members/check/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/games/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/watch-logs/{id}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/members/*/followers").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/members/*/following").permitAll()
                     .anyRequest().authenticated()
             }
             .exceptionHandling { ex ->

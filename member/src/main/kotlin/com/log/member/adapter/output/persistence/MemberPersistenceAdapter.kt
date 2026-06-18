@@ -29,4 +29,7 @@ class MemberPersistenceAdapter(
 
     override fun existsByEmail(email: String): Boolean =
         memberJpaRepository.existsByEmail(email)
+
+    override fun findAllByIds(ids: List<Long>): List<Member> =
+        memberJpaRepository.findAllByIdIn(ids).map { it.toDomain() }
 }

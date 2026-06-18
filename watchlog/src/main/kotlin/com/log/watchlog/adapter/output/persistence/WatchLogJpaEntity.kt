@@ -3,6 +3,7 @@ package com.log.watchlog.adapter.output.persistence
 import com.log.common.domain.KboTeam
 import com.log.watchlog.domain.model.*
 import jakarta.persistence.*
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
@@ -53,7 +54,7 @@ class WatchLogJpaEntity(
     val weatherCondition: WeatherCondition?,
 
     @Column(precision = 4, scale = 1)
-    val temperature: Double?,
+    val temperature: BigDecimal?,
 
     val isPublic: Boolean,
 
@@ -98,7 +99,7 @@ class WatchLogJpaEntity(
 
     private fun buildWeather(): WeatherInfo? {
         if (weatherCondition == null) return null
-        return WeatherInfo(condition = weatherCondition, temperatureCelsius = temperature)
+        return WeatherInfo(condition = weatherCondition, temperatureCelsius = temperature?.toDouble())
     }
 
     companion object {
@@ -123,7 +124,7 @@ class WatchLogJpaEntity(
             foodCost = watchLog.cost?.foodCost,
             transportCost = watchLog.cost?.transportCost,
             weatherCondition = watchLog.weather?.condition,
-            temperature = watchLog.weather?.temperatureCelsius,
+            temperature = watchLog.weather?.temperatureCelsius?.toBigDecimal(),
             isPublic = watchLog.isPublic,
             createdAt = watchLog.createdAt,
             updatedAt = watchLog.updatedAt,

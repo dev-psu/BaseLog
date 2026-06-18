@@ -15,7 +15,7 @@ class AuthController(private val authUseCase: AuthUseCase) {
     @PostMapping("/social-login")
     fun socialLogin(@RequestBody @Valid request: SocialLoginRequest): ApiResponse<SocialLoginResponse> {
         val provider = parseProvider(request.provider)
-        return when (val result = authUseCase.socialLogin(provider, request.code)) {
+        return when (val result = authUseCase.socialLogin(provider, request.accessToken)) {
             is SocialLoginResult.ExistingMember -> ApiResponse.ok(
                 SocialLoginResponse(
                     isNewUser = false,

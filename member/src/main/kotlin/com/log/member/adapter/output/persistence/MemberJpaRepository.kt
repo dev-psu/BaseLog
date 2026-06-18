@@ -17,4 +17,6 @@ interface MemberJpaRepository : JpaRepository<MemberJpaEntity, Long> {
         @Param("provider") provider: SocialProvider,
         @Param("providerId") providerId: String,
     ): MemberJpaEntity?
+
+    fun findAllByIdIn(ids: List<Long>): List<MemberJpaEntity>
 }

@@ -16,4 +16,6 @@ interface MemberRepository {
     fun existsByNickname(nickName: String): Boolean
 
     fun existsByEmail(email: String): Boolean
+
+    fun findAllByIds(ids: List<Long>): List<Member>
 }
